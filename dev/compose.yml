@@ -1,0 +1,22 @@
+name: bk-buster
+
+services:
+  app:
+    image: bk-buster
+    container_name: bk-buster-dev
+    tty: true
+    stdin_open: true
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          memory: 32g
+          cpus: "16.0"
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ../:/workspace
+    command: sh -c "micromamba run -n dev pip install -e /workspace && tail -f /dev/null"
